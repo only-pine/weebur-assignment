@@ -1,8 +1,11 @@
 import Header from "./components/client/Header";
-import ItemList from "./components/client/ItemList";
+import ProductList from "./components/client/ProductList";
 import SearchForm from "./components/client/SearchForm";
+import fetchInitialData from "./components/server/fetchInitialData";
 
-export default function Home() {
+export default async function Home() {
+  const initialData = await fetchInitialData();
+
   return (
     <>
       <Header />
@@ -11,7 +14,7 @@ export default function Home() {
           <section className="sticky top-0 h-20 z-10 bg-white border border-gray-100">
             <SearchForm />
           </section>
-          <ItemList />
+          <ProductList productsData={initialData} />
         </div>
       </main>
     </>
