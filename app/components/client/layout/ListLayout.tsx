@@ -1,5 +1,5 @@
-import Image from "next/image";
 import starImg from "@/public/images/star.svg";
+import Image from "next/image";
 
 export default function ListLayout() {
   return (

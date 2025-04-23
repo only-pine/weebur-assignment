@@ -1,6 +1,6 @@
-import Header from "./components/Header";
-import ItemList from "./components/ItemList";
-import SearchForm from "./components/SearchForm";
+import Header from "./components/client/Header";
+import ItemList from "./components/client/ItemList";
+import SearchForm from "./components/client/SearchForm";
 
 export default function Home() {
   return (
