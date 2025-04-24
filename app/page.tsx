@@ -1,7 +1,7 @@
-import Header from "./components/client/Header";
-import ProductList from "./components/client/ProductList";
-import SearchForm from "./components/client/SearchForm";
-import fetchInitialData from "./components/server/fetchInitialData";
+import fetchInitialData from "./apis/fetchInitialData";
+import Header from "./components/Header";
+import ProductList from "./components/ProductList";
+import SearchForm from "./components/SearchForm";
 
 export default async function Home() {
   const initialData = await fetchInitialData();
