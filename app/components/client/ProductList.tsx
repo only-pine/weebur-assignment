@@ -1,7 +1,11 @@
+"use client";
+
 import { ProductsResponse } from "@/app/types/product";
 import gridImg from "@/public/images/grid.svg";
 import listImg from "@/public/images/list.svg";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 import GridLayout from "./layout/GridLayout";
 
 export default function ProductList({
@@ -9,6 +13,52 @@ export default function ProductList({
 }: {
   productsData: ProductsResponse;
 }) {
+  const observerTarget = useRef<HTMLDivElement>(null);
+  const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useInfiniteQuery({
+      queryKey: ["projects"],
+      queryFn: async ({ pageParam = 0 }): Promise<ProductsResponse> => {
+        const response = await fetch(
+          `https://dummyjson.com/products?limit=20&skip=${pageParam}`
+        );
+        if (!response.ok) throw new Error("목록 조회하는 데 실패했습니다.");
+        return response.json();
+      },
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => {
+        const nextSkip = lastPage.skip + lastPage.limit;
+        return nextSkip < lastPage.total ? nextSkip : undefined;
+      },
+      initialData: {
+        pages: [productsData],
+        pageParams: [productsData.skip + productsData.limit],
+      },
+    });
+  const products = data?.pages.flatMap((page) => page.products) || [];
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+            fetchNextPage();
+          }
+        });
+      },
+      { rootMargin: "0% 0% 50% 0%", threshold: 0 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
   return (
     <section className="flex flex-col w-3/4 mx-auto px-5 py-10 gap-2 bg-white">
       <div className="flex justify-between">
@@ -22,8 +72,12 @@ export default function ProductList({
           </button>
         </div>
       </div>
+
       <div className="h-[1px] bg-gray-100"></div>
-      <GridLayout products={productsData.products} />
+
+      <GridLayout products={products} />
+
+      <div ref={observerTarget} className="h-10"></div>
     </section>
   );
 }
