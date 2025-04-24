@@ -5,7 +5,7 @@ import gridImg from "@/public/images/grid.svg";
 import listImg from "@/public/images/list.svg";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import GridLayout from "./layout/GridLayout";
 
 export default function ProductList({
@@ -14,6 +14,8 @@ export default function ProductList({
   productsData: ProductsResponse;
 }) {
   const observerTarget = useRef<HTMLDivElement>(null);
+  const toastOnceRef = useRef<boolean>(false);
+  const [showToastMessage, setShowToastMessage] = useState(false);
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
     useInfiniteQuery({
       queryKey: ["projects"],
@@ -42,6 +44,17 @@ export default function ProductList({
         entries.forEach((entry) => {
           if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
             fetchNextPage();
+          } else if (
+            entry.isIntersecting &&
+            !hasNextPage &&
+            !toastOnceRef.current
+          ) {
+            setShowToastMessage(true);
+            toastOnceRef.current = true;
+
+            setTimeout(() => {
+              setShowToastMessage(false);
+            }, 3000);
           }
         });
       },
@@ -78,6 +91,12 @@ export default function ProductList({
       <GridLayout products={products} />
 
       <div ref={observerTarget} className="h-10"></div>
+
+      {showToastMessage && (
+        <div className="fixed left-1/2 bottom-10 -translate-x-1/2 z-50 flex px-5 py-3 text-white font-medium bg-gray-800/80 rounded-lg shadow-lg">
+          더 이상 불러올 수 없습니다.
+        </div>
+      )}
     </section>
   );
 }
