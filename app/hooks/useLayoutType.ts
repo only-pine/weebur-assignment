@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { LayoutType } from "../types/search";
 
 export default function useLayoutType(): [
-  LayoutType,
+  LayoutType | "",
   (newType: LayoutType) => void
 ] {
-  const [layoutType, setLayoutType] = useState<LayoutType>(getRandowLayoutType);
+  const [layoutType, setLayoutType] = useState<LayoutType | "">("");
 
   function hasElapsed24h(time: string) {
     const now: number = new Date().getTime();

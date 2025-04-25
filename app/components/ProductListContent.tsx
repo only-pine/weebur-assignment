@@ -10,8 +10,12 @@ export default function ProductListContent({
   layoutType,
 }: {
   products: Product[];
-  layoutType: LayoutType;
+  layoutType: LayoutType | "";
 }) {
+  if (layoutType === "") {
+    return null;
+  }
+
   if (products.length === 0) {
     return (
       <div className="flex mx-auto my-10 text-xl text-semibold">
