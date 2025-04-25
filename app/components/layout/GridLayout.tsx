@@ -1,3 +1,5 @@
+"use client";
+
 import { Product } from "@/app/types/product";
 import starImg from "@/public/images/star.svg";
 import Image from "next/image";

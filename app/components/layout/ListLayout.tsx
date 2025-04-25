@@ -1,3 +1,5 @@
+"use client";
+
 import { PRODUCT_UNIT, REVIEW_TEXT } from "@/app/constants/constants";
 import { Product } from "@/app/types/product";
 import starImg from "@/public/images/star.svg";

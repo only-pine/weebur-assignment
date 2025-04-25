@@ -1,3 +1,5 @@
+"use client";
+
 import { Product } from "../types/product";
 import { LayoutType } from "../types/search";
 import GridLayout from "./layout/GridLayout";
