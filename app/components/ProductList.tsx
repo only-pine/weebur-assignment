@@ -9,6 +9,8 @@ import { useEffect, useRef, useState } from "react";
 import fetchProducts from "../apis/fetchProducts";
 import { MESSAGES, PRODUCT_UNIT, TOTAL_TEXT } from "../constants/constants";
 import GridLayout from "./layout/GridLayout";
+import useLayoutType from "../hooks/useLayoutType";
+import ListLayout from "./layout/ListLayout";
 
 export default function ProductList({
   productsData,
@@ -48,6 +50,8 @@ export default function ProductList({
       },
     });
   const products = data?.pages.flatMap((page) => page.products) || [];
+
+  const [layoutType, changeLayoutType] = useLayoutType();
 
   useEffect(() => {
     toastOnceRef.current = false;
@@ -110,10 +114,10 @@ export default function ProductList({
           {PRODUCT_UNIT}
         </p>
         <div className="flex w-fit p-2 gap-3 rounded-lg bg-gray-100">
-          <button>
+          <button onClick={() => changeLayoutType("list")}>
             <Image src={listImg} width={30} height={30} alt="list" />
           </button>
-          <button>
+          <button onClick={() => changeLayoutType("grid")}>
             <Image src={gridImg} width={30} height={30} alt="grid" />
           </button>
         </div>
@@ -121,7 +125,11 @@ export default function ProductList({
 
       <div className="h-[1px] bg-gray-100"></div>
 
-      <GridLayout products={products} />
+      {layoutType === "list" ? (
+        <ListLayout products={products} />
+      ) : (
+        <GridLayout products={products} />
+      )}
 
       <div ref={observerTarget} className="h-10">
         {isFetchingNextPage && (
