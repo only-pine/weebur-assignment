@@ -4,3 +4,5 @@ export interface Sort {
     order: string;
   };
 }
+
+export type LayoutType = "list" | "grid";
