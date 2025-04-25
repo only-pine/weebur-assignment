@@ -8,9 +8,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import fetchProducts from "../apis/fetchProducts";
 import { MESSAGES, PRODUCT_UNIT, TOTAL_TEXT } from "../constants/constants";
-import GridLayout from "./layout/GridLayout";
 import useLayoutType from "../hooks/useLayoutType";
-import ListLayout from "./layout/ListLayout";
+import ProductListContent from "./ProductListContent";
 
 export default function ProductList({
   productsData,
@@ -125,11 +124,7 @@ export default function ProductList({
 
       <div className="h-[1px] bg-gray-100"></div>
 
-      {layoutType === "list" ? (
-        <ListLayout products={products} />
-      ) : (
-        <GridLayout products={products} />
-      )}
+      <ProductListContent products={products} layoutType={layoutType} />
 
       <div ref={observerTarget} className="h-10">
         {isFetchingNextPage && (
