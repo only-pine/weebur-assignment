@@ -5,16 +5,19 @@ import checkImg from "@/public/images/check.svg";
 import downArrowImg from "@/public/images/down-arrow.svg";
 import searchImg from "@/public/images/search.svg";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
-export default function SearchForm() {
+export default function SearchForm({
+  paramQuery,
+  paramSortBy,
+  paramOrder,
+}: {
+  paramQuery: string;
+  paramSortBy: string;
+  paramOrder: string;
+}) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const paramQuery = searchParams.get("q") || "";
-  const paramSortBy = searchParams.get("sortBy") || "";
-  const paramOrder = searchParams.get("order") || "";
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [formQuery, setFormQuery] = useState<string>(paramQuery);
@@ -39,7 +42,7 @@ export default function SearchForm() {
       params.set("q", formQuery);
     }
 
-    if (formSort) {
+    if (formSort !== "기본 정렬순") {
       params.set("sortBy", SORT_OPTIONS[formSort].sortBy);
       params.set("order", SORT_OPTIONS[formSort].order);
     }
