@@ -79,7 +79,7 @@ export default function ProductList({
           }
         });
       },
-      { rootMargin: "0% 0% 50% 0%", threshold: 0 }
+      { rootMargin: "0% 0% 30% 0%", threshold: 0 }
     );
 
     if (observerTarget.current) {
