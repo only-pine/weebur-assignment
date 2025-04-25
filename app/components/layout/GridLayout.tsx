@@ -18,7 +18,7 @@ export default function GridLayout({ products }: { products: Product[] }) {
               <p className="text-lg font-bold">{product.title}</p>
               <p className="text-sm text-gray-600">{product.description}</p>
             </div>
-            <div className="flex flex-row gap-0.5">
+            <div className="flex flex-row gap-0.5 text-sm text-gray-700">
               <Image src={starImg} width={20} height={20} alt="star" />
               {product.rating} ({product.reviews.length})
             </div>

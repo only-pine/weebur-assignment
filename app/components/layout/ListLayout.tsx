@@ -19,7 +19,7 @@ export default function ListLayout({ products }: { products: Product[] }) {
               <p className="text-lg font-bold">{product.title}</p>
               <p className="text-base">{product.description}</p>
             </div>
-            <div className="flex flex-col item-end min-w-[100px] gap-2">
+            <div className="flex flex-col item-end justify-start min-w-[100px] gap-2 text-sm text-gray-700">
               <div className="flex flex-row gap-0.5 justify-end">
                 <Image src={starImg} width={20} height={20} alt="star" />
                 {product.rating}

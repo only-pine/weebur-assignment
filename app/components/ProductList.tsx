@@ -109,7 +109,7 @@ export default function ProductList({
     <section className="flex flex-col w-3/4 mx-auto px-5 py-10 gap-2 bg-white">
       <div className="flex justify-between">
         <p className="flex items-center">
-          {TOTAL_TEXT} {productsData.total}
+          {TOTAL_TEXT} <b>{productsData.total}</b>
           {PRODUCT_UNIT}
         </p>
         <div className="flex w-fit rounded-lg bg-gray-100 border-2 border-gray-100">
