@@ -1,15 +1,15 @@
 "use client";
 
 import { ProductsResponse } from "@/app/types/product";
-import gridImg from "@/public/images/grid.svg";
-import listImg from "@/public/images/list.svg";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import fetchProducts from "../apis/fetchProducts";
 import { MESSAGES, PRODUCT_UNIT, TOTAL_TEXT } from "../constants/constants";
 import useLayoutType from "../hooks/useLayoutType";
+import LayoutToggle from "./LayoutToggle";
+import LoadingSpinner from "./LoadingSpinner";
 import ProductListContent from "./ProductListContent";
+import ToastMessage from "./ToastMessage";
 
 export default function ProductList({
   productsData,
@@ -112,24 +112,10 @@ export default function ProductList({
           {TOTAL_TEXT} <b>{productsData.total}</b>
           {PRODUCT_UNIT}
         </p>
-        <div className="flex w-fit rounded-lg bg-gray-100 border-2 border-gray-100">
-          <button
-            className={`${
-              layoutType === "list" && "bg-white"
-            } p-2 rounded-l-md`}
-            onClick={() => changeLayoutType("list")}
-          >
-            <Image src={listImg} width={30} height={30} alt="list" />
-          </button>
-          <button
-            className={`${
-              layoutType === "grid" && "bg-white"
-            } p-2 rounded-r-md`}
-            onClick={() => changeLayoutType("grid")}
-          >
-            <Image src={gridImg} width={30} height={30} alt="grid" />
-          </button>
-        </div>
+        <LayoutToggle
+          layoutType={layoutType}
+          changeLayoutType={changeLayoutType}
+        />
       </div>
 
       <div className="h-[1px] bg-gray-100"></div>
@@ -137,18 +123,10 @@ export default function ProductList({
       <ProductListContent products={products} layoutType={layoutType} />
 
       <div ref={observerTarget} className="h-10">
-        {isFetchingNextPage && (
-          <div className="flex justify-center py-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-800"></div>
-          </div>
-        )}
+        {isFetchingNextPage && <LoadingSpinner />}
       </div>
 
-      {showToastMessage && (
-        <div className="fixed left-1/2 bottom-10 -translate-x-1/2 z-50 flex px-5 py-3 text-white font-medium bg-gray-800/80 rounded-lg shadow-lg">
-          {MESSAGES.NO_MORE_DATA}
-        </div>
-      )}
+      {showToastMessage && <ToastMessage message={MESSAGES.NO_MORE_DATA} />}
     </section>
   );
 }
