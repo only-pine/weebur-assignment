@@ -7,6 +7,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import fetchProducts from "../apis/fetchProducts";
+import { MESSAGES, PRODUCT_UNIT, TOTAL_TEXT } from "../constants/constants";
 import GridLayout from "./layout/GridLayout";
 
 export default function ProductList({
@@ -58,18 +59,13 @@ export default function ProductList({
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          if (checkFetchNextPage(entry.isIntersecting)) {
             fetchNextPage();
 
             if (initialLoadDataRef.current) {
               initialLoadDataRef.current = false;
             }
-          } else if (
-            entry.isIntersecting &&
-            !hasNextPage &&
-            !toastOnceRef.current &&
-            !initialLoadDataRef.current
-          ) {
+          } else if (checkShowToast(entry.isIntersecting)) {
             setShowToastMessage(true);
             toastOnceRef.current = true;
 
@@ -81,6 +77,19 @@ export default function ProductList({
       },
       { rootMargin: "0% 0% 30% 0%", threshold: 0 }
     );
+
+    function checkFetchNextPage(isIntersecting: boolean): boolean {
+      return isIntersecting && hasNextPage && !isFetchingNextPage;
+    }
+
+    function checkShowToast(isIntersecting: boolean): boolean {
+      return (
+        isIntersecting &&
+        !hasNextPage &&
+        !toastOnceRef.current &&
+        !initialLoadDataRef.current
+      );
+    }
 
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
@@ -96,7 +105,10 @@ export default function ProductList({
   return (
     <section className="flex flex-col w-3/4 mx-auto px-5 py-10 gap-2 bg-white">
       <div className="flex justify-between">
-        <p className="flex items-center">총 {productsData.total}개</p>
+        <p className="flex items-center">
+          {TOTAL_TEXT} {productsData.total}
+          {PRODUCT_UNIT}
+        </p>
         <div className="flex w-fit p-2 gap-3 rounded-lg bg-gray-100">
           <button>
             <Image src={listImg} width={30} height={30} alt="list" />
@@ -121,7 +133,7 @@ export default function ProductList({
 
       {showToastMessage && (
         <div className="fixed left-1/2 bottom-10 -translate-x-1/2 z-50 flex px-5 py-3 text-white font-medium bg-gray-800/80 rounded-lg shadow-lg">
-          더 이상 불러올 수 없습니다.
+          {MESSAGES.NO_MORE_DATA}
         </div>
       )}
     </section>

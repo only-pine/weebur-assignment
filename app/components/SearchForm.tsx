@@ -1,6 +1,11 @@
 "use client";
 
-import { SORT_OPTIONS } from "@/app/constants/constants";
+import {
+  DEFAULT_SORT,
+  SEARCH_BUTTON_TEXT,
+  SEARCH_INPUT_PLACEHOLDER,
+  SORT_OPTIONS,
+} from "@/app/constants/constants";
 import checkImg from "@/public/images/check.svg";
 import downArrowImg from "@/public/images/down-arrow.svg";
 import searchImg from "@/public/images/search.svg";
@@ -30,7 +35,7 @@ export default function SearchForm({
       }
     }
 
-    return "기본 정렬순";
+    return DEFAULT_SORT;
   }
 
   function handleSearch(event: FormEvent) {
@@ -42,7 +47,7 @@ export default function SearchForm({
       params.set("q", formQuery);
     }
 
-    if (formSort !== "기본 정렬순") {
+    if (formSort !== DEFAULT_SORT) {
       params.set("sortBy", SORT_OPTIONS[formSort].sortBy);
       params.set("order", SORT_OPTIONS[formSort].order);
     }
@@ -102,7 +107,7 @@ export default function SearchForm({
           type="text"
           value={formQuery}
           onChange={(e) => setFormQuery(e.target.value)}
-          placeholder="상품 검색"
+          placeholder={SEARCH_INPUT_PLACEHOLDER}
           className="bg-transparent focus:outline-none"
         />
       </div>
@@ -111,7 +116,7 @@ export default function SearchForm({
         type="submit"
         className="w-18 h-12 p-2 rounded-md bg-black text-white"
       >
-        검색
+        {SEARCH_BUTTON_TEXT}
       </button>
     </form>
   );
